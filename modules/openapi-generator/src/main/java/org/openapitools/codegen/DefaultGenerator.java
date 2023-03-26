@@ -704,6 +704,40 @@ public class DefaultGenerator implements Generator {
         if (GlobalSettings.getProperty("debugOperations") != null) {
             LOGGER.info("############ Operation info ############");
             Json.prettyPrint(allOperations);
+
+            if (GlobalSettings.getProperty("writeOperationLogs") != null) {
+                FileOutputStream fileOutStream = null;
+                OutputStreamWriter outStreamWriter = null;
+                BufferedWriter writer = null;
+                try {
+                    String data = Json.pretty(allOperations);
+                    File file = new File("/Users/futurescape/Desktop/abc.txt");
+
+                    if (!file.exists()) {
+                        file.createNewFile();
+                    }
+
+                    fileOutStream = new FileOutputStream(file);
+                    outStreamWriter = new OutputStreamWriter(fileOutStream, "UTF-8");
+                    writer = new BufferedWriter(outStreamWriter);
+                    if (data != null) {
+                        writer.write(data, 0, data.length());
+                    }
+                    System.out.println("Operations Logs Updated");
+                } catch (Exception e) {
+                    System.out.println("ERROR - " + e);
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (writer != null) {
+                            writer.close();
+                        }
+                    } catch (Exception e) {
+                        System.out.println("ERROR - " + e);
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
 
     }

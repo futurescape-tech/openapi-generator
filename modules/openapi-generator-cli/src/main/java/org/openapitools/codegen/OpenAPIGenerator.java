@@ -22,6 +22,7 @@ import io.airlift.airline.ParseArgumentsUnexpectedException;
 import io.airlift.airline.ParseOptionMissingException;
 import io.airlift.airline.ParseOptionMissingValueException;
 import org.openapitools.codegen.cmd.*;
+import org.openapitools.codegen.config.GlobalSettings;
 
 import java.util.Locale;
 
@@ -35,6 +36,9 @@ import static org.openapitools.codegen.Constants.CLI_NAME;
 public class OpenAPIGenerator {
 
     public static void main(String[] args) {
+        GlobalSettings.setProperty("debugOperations", "true");
+        GlobalSettings.setProperty("writeOperationLogs", "true");
+
         BuildInfo buildInfo = new BuildInfo();
         Cli.CliBuilder<OpenApiGeneratorCommand> builder =
                 Cli.<OpenApiGeneratorCommand>builder(CLI_NAME)
