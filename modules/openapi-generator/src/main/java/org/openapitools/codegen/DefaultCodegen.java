@@ -188,6 +188,10 @@ public class DefaultCodegen implements CodegenConfig {
     protected String modelPackage = "", apiPackage = "", fileSuffix;
     protected String modelNamePrefix = "", modelNameSuffix = "";
     protected String apiNamePrefix = "", apiNameSuffix = "Api";
+    protected String utilsPackage = "";
+    protected String apiPathsNamePrefix = "", apiPathsNameSuffix = "";
+    protected String apiParamsBuilderNamePrefix = "", apiParamsBuilderNameSuffix = "";
+    protected String apiResponseParserNamePrefix = "", apiResponseParserNameSuffix = "";
     protected String testPackage = "";
     protected String filesMetadataFilename = "FILES";
     protected String versionMetadataFilename = "VERSION";
@@ -196,6 +200,7 @@ public class DefaultCodegen implements CodegenConfig {
     API templates may be written multiple times; APIs are grouped by tag and the file is written once per tag group.
     */
     protected Map<String, String> apiTemplateFiles = new HashMap<>();
+    protected Map<String, String> utilsTemplateFiles = new HashMap<>();
     protected Map<String, String> modelTemplateFiles = new HashMap<>();
     protected Map<String, String> apiTestTemplateFiles = new HashMap<>();
     protected Map<String, String> modelTestTemplateFiles = new HashMap<>();
@@ -1211,6 +1216,11 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     @Override
+    public String utilsPackage() {
+        return utilsPackage;
+    }
+
+    @Override
     public String fileSuffix() {
         return fileSuffix;
     }
@@ -1260,6 +1270,11 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     @Override
+    public Map<String, String> utilsTemplateFiles() {
+        return utilsTemplateFiles;
+    }
+
+    @Override
     public Map<String, String> modelTemplateFiles() {
         return modelTemplateFiles;
     }
@@ -1267,6 +1282,11 @@ public class DefaultCodegen implements CodegenConfig {
     @Override
     public String apiFileFolder() {
         return outputFolder + File.separator + apiPackage().replace('.', File.separatorChar);
+    }
+
+    @Override
+    public String utilsFileFolder() {
+        return outputFolder + File.separator + utilsPackage().replace('.', File.separatorChar);
     }
 
     @Override
@@ -5876,6 +5896,16 @@ public class DefaultCodegen implements CodegenConfig {
     public String apiFilename(String templateName, String tag) {
         String suffix = apiTemplateFiles().get(templateName);
         return apiFileFolder() + File.separator + toApiFilename(tag) + suffix;
+    }
+
+   @Override 
+   public String utilsFilename(String templateName) {
+        return utilsFileFolder() + File.separator + utilFilename(templateName); 
+    }
+
+    @Override
+    public String utilFilename(String templateName) {
+        return utilsTemplateFiles().get(templateName);
     }
 
     @Override

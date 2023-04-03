@@ -24,6 +24,7 @@ public class CodegenConstants {
     /* System Properties */
     // NOTE: We may want to move these to a separate class to avoid confusion or modification.
     public static final String APIS = "apis";
+    public static final String UTILS = "utils";
     public static final String MODELS = "models";
     public static final String SUPPORTING_FILES = "supportingFiles";
     public static final String MODEL_TESTS = "modelTests";
