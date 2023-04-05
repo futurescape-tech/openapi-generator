@@ -61,13 +61,13 @@ public interface CodegenConfig {
 
     String apiFileFolder();
 
-    String utilsFileFolder();
+    String apiUtilsFileFolder();
 
     String apiTestFileFolder();
 
     String apiDocFileFolder();
 
-    String utilsPackage();
+    String apiUtilsPackage();
 
     String fileSuffix();
 
@@ -155,7 +155,7 @@ public interface CodegenConfig {
 
     Map<String, String> apiTemplateFiles();
 
-    Map<String, String> utilsTemplateFiles();
+    Map<String, String> apiUtilsTemplateFiles();
 
     Map<String, String> modelTemplateFiles();
 
@@ -221,9 +221,9 @@ public interface CodegenConfig {
 
     String apiFilename(String templateName, String tag);
 
-    String utilsFilename(String templateName);
+    String apiUtilsFilename(String templateName);
 
-    String utilFilename(String templateName);
+    String apiUtilFilename(String templateName);
 
     String apiTestFilename(String templateName, String tag);
 
@@ -345,4 +345,11 @@ public interface CodegenConfig {
 
     boolean getUseOpenAPINormalizer();
 
+    String getModuleName();
+
+    void setModuleName(String moduleName);
+
+    String getModuleCode();
+
+    void setModuleCode(String moduleCode);
 }

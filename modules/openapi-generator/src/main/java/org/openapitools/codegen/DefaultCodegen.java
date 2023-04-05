@@ -188,10 +188,7 @@ public class DefaultCodegen implements CodegenConfig {
     protected String modelPackage = "", apiPackage = "", fileSuffix;
     protected String modelNamePrefix = "", modelNameSuffix = "";
     protected String apiNamePrefix = "", apiNameSuffix = "Api";
-    protected String utilsPackage = "";
-    protected String apiPathsNamePrefix = "", apiPathsNameSuffix = "";
-    protected String apiParamsBuilderNamePrefix = "", apiParamsBuilderNameSuffix = "";
-    protected String apiResponseParserNamePrefix = "", apiResponseParserNameSuffix = "";
+    protected String apiUtilsPackage = "";
     protected String testPackage = "";
     protected String filesMetadataFilename = "FILES";
     protected String versionMetadataFilename = "VERSION";
@@ -200,7 +197,7 @@ public class DefaultCodegen implements CodegenConfig {
     API templates may be written multiple times; APIs are grouped by tag and the file is written once per tag group.
     */
     protected Map<String, String> apiTemplateFiles = new HashMap<>();
-    protected Map<String, String> utilsTemplateFiles = new HashMap<>();
+    protected Map<String, String> apiUtilsTemplateFiles = new HashMap<>();
     protected Map<String, String> modelTemplateFiles = new HashMap<>();
     protected Map<String, String> apiTestTemplateFiles = new HashMap<>();
     protected Map<String, String> modelTestTemplateFiles = new HashMap<>();
@@ -321,6 +318,10 @@ public class DefaultCodegen implements CodegenConfig {
     protected boolean addSchemaImportsFromV3SpecLocations = false;
 
     protected boolean addSuffixToDuplicateOperationNicknames = true;
+
+    protected String moduleName;
+    
+    protected String moduleCode;
 
     public boolean getAddSuffixToDuplicateOperationNicknames() {
         return addSuffixToDuplicateOperationNicknames;
@@ -1216,8 +1217,8 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String utilsPackage() {
-        return utilsPackage;
+    public String apiUtilsPackage() {
+        return apiUtilsPackage;
     }
 
     @Override
@@ -1270,8 +1271,8 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public Map<String, String> utilsTemplateFiles() {
-        return utilsTemplateFiles;
+    public Map<String, String> apiUtilsTemplateFiles() {
+        return apiUtilsTemplateFiles;
     }
 
     @Override
@@ -1285,8 +1286,8 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String utilsFileFolder() {
-        return outputFolder + File.separator + utilsPackage().replace('.', File.separatorChar);
+    public String apiUtilsFileFolder() {
+        return outputFolder + File.separator + apiUtilsPackage().replace('.', File.separatorChar);
     }
 
     @Override
@@ -1371,6 +1372,26 @@ public class DefaultCodegen implements CodegenConfig {
     @Override
     public String getVersionMetadataFilename() {
         return versionMetadataFilename;
+    }
+
+    @Override
+    public String getModuleName() {
+        return moduleName;
+    }
+
+    @Override
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+    }
+
+    @Override
+    public String getModuleCode() {
+        return moduleCode;
+    }
+
+    @Override
+    public void setModuleCode(String moduleCode) {
+        this.moduleCode = moduleCode;
     }
 
     public void setVersionMetadataFilename(String versionMetadataFilename) {
@@ -5899,13 +5920,13 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
    @Override 
-   public String utilsFilename(String templateName) {
-        return utilsFileFolder() + File.separator + utilFilename(templateName); 
+   public String apiUtilsFilename(String templateName) {
+        return apiUtilsFileFolder() + File.separator + apiUtilFilename(templateName); 
     }
 
     @Override
-    public String utilFilename(String templateName) {
-        return utilsTemplateFiles().get(templateName);
+    public String apiUtilFilename(String templateName) {
+        return apiUtilsTemplateFiles().get(templateName);
     }
 
     @Override

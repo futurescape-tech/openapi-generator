@@ -541,6 +541,22 @@ public class CodegenConfigurator {
         return this;
     }
 
+    public CodegenConfigurator setModuleName(String moduleName) {
+        if (StringUtils.isNotEmpty(moduleName)) {
+            addAdditionalProperty(CodegenConstants.MODULE_NAME_, moduleName);
+        }
+        generatorSettingsBuilder.withModuleName(moduleName);
+        return this;
+    }
+
+    public CodegenConfigurator setModuleCode(String moduleCode) {
+        if (StringUtils.isNotEmpty(moduleCode)) {
+            addAdditionalProperty(CodegenConstants.MODULE_CODE_, moduleCode);
+        }
+        generatorSettingsBuilder.withModuleCode(moduleCode);
+        return this;
+    }
+
     @SuppressWarnings("WeakerAccess")
     public Context<?> toContext() {
         Validate.notEmpty(generatorName, "generator name must be specified");
@@ -666,6 +682,8 @@ public class CodegenConfigurator {
         config.setEnablePostProcessFile(workflowSettings.isEnablePostProcessFile());
         config.setEnableMinimalUpdate(workflowSettings.isEnableMinimalUpdate());
         config.setStrictSpecBehavior(workflowSettings.isStrictSpecBehavior());
+        config.setModuleName(generatorSettings.getModuleName());
+        config.setModuleCode(generatorSettings.getModuleCode());
 
         TemplatingEngineAdapter templatingEngine = TemplatingEngineLoader.byIdentifier(workflowSettings.getTemplatingEngineName());
         config.setTemplatingEngine(templatingEngine);

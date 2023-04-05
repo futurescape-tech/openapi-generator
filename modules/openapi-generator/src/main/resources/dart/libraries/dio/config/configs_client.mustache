@@ -1,0 +1,59 @@
+
+import 'package:flagsmith/flagsmith.dart';
+import 'package:flutter/foundation.dart';
+
+class ConfigsClient {
+
+  late FlagsmithClient client;
+
+  ConfigsClient({
+    required String url,
+    required String configName,
+    required String apiKey}) {
+    client = FlagsmithClient(
+        apiKey: apiKey,
+        seeds: [Flag.seed(configName, enabled: true)],
+        config: FlagsmithConfig(baseURI: url));
+  }
+
+  Future<void> init() {
+    return Future<void>(() async {
+      await client.initialize();
+      await client.getFeatureFlags(reload: true);
+    });
+  }
+
+  Future<bool> isEnabled(String name) {
+    return Future<bool>(() async {
+      try {
+        return (await isFlagPresent(name)) &&
+            (await client.isFeatureFlagEnabled(name, reload: true));
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+      return false;
+    });
+  }
+
+  Future<bool> isFlagPresent(String name) {
+    return Future<bool>(() async {
+      try {
+        return await client.hasFeatureFlag(name, reload: true);
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+      return false;
+    });
+  }
+
+  Future<String?> getFlagValue(String name) {
+    return Future<String?>(() async {
+      try {
+        return await client.getFeatureFlagValue(name, reload: true);
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+      return null;
+    });
+  }
+}

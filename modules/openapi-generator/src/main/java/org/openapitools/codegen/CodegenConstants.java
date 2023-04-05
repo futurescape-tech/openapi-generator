@@ -24,13 +24,16 @@ public class CodegenConstants {
     /* System Properties */
     // NOTE: We may want to move these to a separate class to avoid confusion or modification.
     public static final String APIS = "apis";
-    public static final String UTILS = "utils";
+    public static final String API_UTILS = "api_utils";
     public static final String MODELS = "models";
     public static final String SUPPORTING_FILES = "supportingFiles";
     public static final String MODEL_TESTS = "modelTests";
     public static final String MODEL_DOCS = "modelDocs";
     public static final String API_TESTS = "apiTests";
     public static final String API_DOCS = "apiDocs";
+
+    public static final String MODULE_NAME_ = "moduleName";
+    public static final String MODULE_CODE_ = "moduleCode";
 
     public static final String WITH_XML = "withXml";
     public static final String SKIP_FORM_MODEL = "skipFormModel";

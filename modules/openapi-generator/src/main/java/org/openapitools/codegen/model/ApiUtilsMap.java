@@ -3,7 +3,7 @@ package org.openapitools.codegen.model;
 import java.util.HashMap;
 import java.util.List;
 
-public class UtilsMap extends HashMap<String, Object> {
+public class ApiUtilsMap extends HashMap<String, Object> {
 
     public void setOperations(List<OperationsMap> operations) {
         put("utils", operations);

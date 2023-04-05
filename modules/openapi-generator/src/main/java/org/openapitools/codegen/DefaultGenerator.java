@@ -49,7 +49,7 @@ import org.openapitools.codegen.model.ModelMap;
 import org.openapitools.codegen.model.ModelsMap;
 import org.openapitools.codegen.model.OperationMap;
 import org.openapitools.codegen.model.OperationsMap;
-import org.openapitools.codegen.model.UtilsMap;
+import org.openapitools.codegen.model.ApiUtilsMap;
 import org.openapitools.codegen.serializer.SerializerUtils;
 import org.openapitools.codegen.templating.CommonTemplateContentLocator;
 import org.openapitools.codegen.templating.GeneratorTemplateContentLocator;
@@ -760,25 +760,6 @@ public class DefaultGenerator implements Generator {
             }
         }
 
-        try {
-            UtilsMap utilsMap = new UtilsMap();
-            utilsMap.setOperations(allOperations);
-
-            for (String templateName : config.utilsTemplateFiles().keySet()) {
-                String filename = config.utilsFilename(templateName);
-                File written = processTemplateToFile(utilsMap, templateName, filename, generateApis,
-                        CodegenConstants.UTILS);
-                if (written != null) {
-                    files.add(written);
-                    if (config.isEnablePostProcessFile() && !dryRun) {
-                        config.postProcessFile(written, "utils");
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         if (GlobalSettings.getProperty("debugOperations") != null) {
             LOGGER.info("############ Operation info ############");
             Json.prettyPrint(allOperations);
@@ -952,6 +933,9 @@ public class DefaultGenerator implements Generator {
         }
 
         config.postProcessSupportingFileData(bundle);
+
+        bundle.put("moduleName", config.getModuleName());
+        bundle.put("moduleCode", config.getModuleCode());
 
         if (GlobalSettings.getProperty("debugSupportingFiles") != null) {
             LOGGER.info("############ Supporting file info ############");

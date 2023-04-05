@@ -45,6 +45,8 @@ public final class GeneratorSettings implements Serializable {
     private String artifactId;
     private String artifactVersion;
     private String library;
+    private String moduleName;
+    private String moduleCode;
 
     private final Map<String, String> instantiationTypes;
     private final Map<String, String> typeMappings;
@@ -371,6 +373,14 @@ public final class GeneratorSettings implements Serializable {
         return httpUserAgent;
     }
 
+    public String getModuleName() {
+        return moduleName;
+    }
+
+    public String getModuleCode() {
+        return moduleCode;
+    }
+
     private GeneratorSettings(Builder builder) {
         setDefaults();
 
@@ -401,6 +411,8 @@ public final class GeneratorSettings implements Serializable {
         gitRepoId = builder.gitRepoId;
         releaseNote = builder.releaseNote;
         httpUserAgent = builder.httpUserAgent;
+        moduleName = builder.moduleName;
+        moduleCode = builder.moduleCode;
 
         Map<String, Object> additional = new HashMap<>(builder.additionalProperties);
 
@@ -448,6 +460,12 @@ public final class GeneratorSettings implements Serializable {
         }
         if (isNotEmpty(httpUserAgent)) {
             additional.put("httpUserAgent", httpUserAgent);
+        }
+        if (isNotEmpty(moduleName)) {
+            additional.put("moduleName", moduleName);
+        }
+        if (isNotEmpty(moduleCode)) {
+            additional.put("moduleCode", moduleCode);
         }
 
         additionalProperties = Collections.unmodifiableMap(additional);
@@ -565,6 +583,8 @@ public final class GeneratorSettings implements Serializable {
         private String artifactId;
         private String artifactVersion;
         private String library;
+        private String moduleName;
+        private String moduleCode;
         private Map<String, String> instantiationTypes;
         private Map<String, String> typeMappings;
         private Map<String, Object> additionalProperties;
@@ -1062,6 +1082,16 @@ public final class GeneratorSettings implements Serializable {
             return this;
         }
 
+        public Builder withModuleName(String moduleName) {
+            this.moduleName = moduleName;
+            return this;
+        }
+
+        public Builder withModuleCode(String moduleCode) {
+            this.moduleCode = moduleCode;
+            return this;
+        }
+
         /**
          * Returns a {@code GeneratorSettings} built from the parameters previously set.
          *
@@ -1101,6 +1131,8 @@ public final class GeneratorSettings implements Serializable {
                 ", gitRepoId='" + gitRepoId + '\'' +
                 ", releaseNote='" + releaseNote + '\'' +
                 ", httpUserAgent='" + httpUserAgent + '\'' +
+                ", moduleName='" + moduleName + '\'' +
+                ", moduleCode='" + moduleCode + '\'' +
                 '}';
     }
 
@@ -1135,7 +1167,9 @@ public final class GeneratorSettings implements Serializable {
                 Objects.equals(getGitUserId(), that.getGitUserId()) &&
                 Objects.equals(getGitRepoId(), that.getGitRepoId()) &&
                 Objects.equals(getReleaseNote(), that.getReleaseNote()) &&
-                Objects.equals(getHttpUserAgent(), that.getHttpUserAgent());
+                Objects.equals(getHttpUserAgent(), that.getHttpUserAgent()) &&
+                Objects.equals(getModuleName(), that.getModuleName()) &&
+                Objects.equals(getModuleCode(), that.getModuleCode());
     }
 
     @Override
@@ -1167,7 +1201,9 @@ public final class GeneratorSettings implements Serializable {
                 getGitUserId(),
                 getGitRepoId(),
                 getReleaseNote(),
-                getHttpUserAgent()
+                getHttpUserAgent(),
+                getModuleName(),
+                getModuleCode()
         );
     }
 }

@@ -1,0 +1,41 @@
+
+class Environment {
+
+  String? url;
+  String? token;
+  String? apiKey;
+  String? clientId;
+  String? clientSecret;
+  String? name;
+
+  Environment({
+    this.url,
+    this.token,
+    this.apiKey,
+    this.clientId,
+    this.clientSecret,
+    this.name
+  });
+
+  Environment.fromJson(Map<String, dynamic>? json) {
+    if (json != null) {
+      url = json['url'];
+      token = json['token'];
+      apiKey = json['api_key'];
+      clientId = json['client_id'];
+      clientSecret = json['client_secret'];
+      name = json['name'];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data =  {};
+    data['url'] = url;
+    data['token'] = token;
+    data['api_key'] = apiKey;
+    data['client_id'] = clientId;
+    data['client_secret'] = clientSecret;
+    data['name'] = name;
+    return data;
+  }
+}

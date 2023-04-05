@@ -99,13 +99,13 @@ public abstract class AbstractDartCodegen extends DefaultCodegen {
         outputFolder = "generated-code/dart";
         modelTemplateFiles.put("model.mustache", ".dart");
         apiTemplateFiles.put("api.mustache", ".dart");
-        utilsTemplateFiles.put("api_paths.mustache", "api_paths.dart");
-        //utilsTemplateFiles.put("api_params_builder.mustache", "api_params_builder.dart");
-        //utilsTemplateFiles.put("api_response_parser.mustache", "api_response_parser.dart");
+        //apiUtilsTemplateFiles.put("api_paths.mustache", "api_paths.dart");
+        //apiUtilsTemplateFiles.put("api_params_builder.mustache", "api_params_builder.dart");
+        //apiUtilsTemplateFiles.put("api_response_parser.mustache", "api_response_parser.dart");
         embeddedTemplateDir = templateDir = "dart2";
         apiPackage = "api";
         modelPackage = "model";
-        utilsPackage = "utils";
+        apiUtilsPackage = "api";
         modelDocTemplateFiles.put("object_doc.mustache", ".md");
         apiDocTemplateFiles.put("api_doc.mustache", ".md");
 
@@ -330,8 +330,8 @@ public abstract class AbstractDartCodegen extends DefaultCodegen {
     }
 
     @Override
-    public String utilsFileFolder() {
-        return (outputFolder + File.separator + libPath + sourceFolder + File.separator + utilsPackage()).replace('/', File.separatorChar);
+    public String apiUtilsFileFolder() {
+        return (outputFolder + File.separator + libPath + sourceFolder + File.separator + apiUtilsPackage()).replace('/', File.separatorChar);
     }
 
     @Override
