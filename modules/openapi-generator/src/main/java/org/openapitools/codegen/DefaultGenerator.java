@@ -711,7 +711,7 @@ public class DefaultGenerator implements Generator {
                 BufferedWriter writer = null;
                 try {
                     String data = Json.pretty(allOperations);
-                    File file = new File("/Users/futurescape/Desktop/abc.txt");
+                    File file = new File("D:\\abc.txt");
 
                     if (!file.exists()) {
                         file.createNewFile();

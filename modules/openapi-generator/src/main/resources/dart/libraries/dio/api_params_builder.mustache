@@ -1,0 +1,47 @@
+{{#operations}}
+{{#imports}}import '{{.}}';
+{{/imports}}
+
+class {{classname}}ApiParamsBuilder {
+
+  {{#operation}}
+
+  static Map<String, dynamic> build{{nickname}}Params({ {{#allParams}}{{#isQueryParam}}
+    {{#required}}{{^isNullable}}{{^defaultValue}}required {{/defaultValue}}{{/isNullable}}{{/required}}{{{dataType}}}{{#required}}{{#isNullable}}?{{/isNullable}}{{/required}}{{^required}}?{{/required}} {{paramName}}{{^isContainer}}{{#defaultValue}} = {{{.}}}{{/defaultValue}}{{/isContainer}},{{/isQueryParam}}{{#isHeaderParam}}
+    {{#required}}{{^isNullable}}{{^defaultValue}}required {{/defaultValue}}{{/isNullable}}{{/required}}{{{dataType}}}{{#required}}{{#isNullable}}?{{/isNullable}}{{/required}}{{^required}}?{{/required}} {{paramName}}{{^isContainer}}{{#defaultValue}} = {{{.}}}{{/defaultValue}}{{/isContainer}},{{/isHeaderParam}}{{#isBodyParam}}
+    {{#required}}{{^isNullable}}required {{/isNullable}}{{/required}}{{{dataType}}}{{#required}}{{#isNullable}}?{{/isNullable}}{{/required}}{{^required}}?{{/required}} {{paramName}},{{/isBodyParam}}{{#isFormParam}}
+    {{#required}}{{^isNullable}}required {{/isNullable}}{{/required}}{{{dataType}}}{{#required}}{{#isNullable}}?{{/isNullable}}{{/required}}{{^required}}?{{/required}} {{paramName}},{{/isFormParam}}{{/allParams}}
+  }) {
+    
+    {{#hasQueryParams}}
+    final _queryParameters = <String, dynamic>{
+      {{#queryParams}}
+      {{^required}}{{^isNullable}}if ({{{paramName}}} != null) {{/isNullable}}{{/required}}r'{{baseName}}': {{#includeLibraryTemplate}}api/query_param{{/includeLibraryTemplate}},
+      {{/queryParams}}
+    };{{/hasQueryParams}}
+
+    dynamic _bodyData;
+
+    try {
+        {{#includeLibraryTemplate}}api/serialize{{/includeLibraryTemplate}}
+    } catch (error, stackTrace) {
+      throw ApiError(
+        code: -1,
+        message: '',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+    return {
+      {{#hasQueryParams}}'query': _queryParameters,{{/hasQueryParams}},
+      {{#hasBodyOrFormParams}}'body': _bodyData{{/hasBodyOrFormParams}}
+
+    };
+  }
+
+}
+{{/operation}}
+{{/operations}}
+
+

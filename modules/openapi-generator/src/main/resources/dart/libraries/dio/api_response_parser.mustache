@@ -1,0 +1,26 @@
+{{#imports}}import '{{.}}';
+{{/imports}}
+
+{{#operations}}
+class {{classname}}ResponseParser {
+  {{#operation}}
+  {{#returnType}}
+    {{{returnType}}} parse{{nickname}}Response(dynamic response) {
+    {{{returnType}}} _data;
+    try {
+      {{#includeLibraryTemplate}}api/deserialize{{/includeLibraryTemplate}}
+      return _responseData;
+    } catch (error, stackTrace) {
+      throw ApiError(
+        code: -1,
+        message: '',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+  {{/returnType}}
+  {{/operation}}
+}
+{{/operations}}
+

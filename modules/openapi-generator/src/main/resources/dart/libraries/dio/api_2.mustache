@@ -1,0 +1,127 @@
+{{>header}}
+import 'dart:async';
+
+{{#includeLibraryTemplate}}api/imports{{/includeLibraryTemplate}}
+import 'package:netcomm/netcomm.dart';
+
+{{#operations}}
+{{#imports}}import '{{.}}';
+{{/imports}}
+
+class {{classname}} {
+
+  final Netcomm2 _netcomm;
+
+{{#includeLibraryTemplate}}api/constructor{{/includeLibraryTemplate}}
+
+  {{#operation}}
+  /// {{summary}}{{^summary}}{{nickname}}{{/summary}}
+  /// {{notes}}
+  ///
+  /// Parameters:
+  {{#allParams}}
+  /// * [{{paramName}}] {{#description}}- {{{.}}}{{/description}}
+  {{/allParams}}
+  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
+  /// * [headers] - Can be used to add additional headers to the request
+  /// * [extras] - Can be used to add flags to the request
+  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
+  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
+  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
+  ///
+  /// Returns a [Future]{{#returnType}} containing a [Response] with a [{{{.}}}] as data{{/returnType}}
+  /// Throws [HttpException] if API call or serialization fails
+  {{#externalDocs}}
+  /// {{description}}
+  /// Also see [{{summary}} Documentation]({{url}})
+  {{/externalDocs}}
+  {{#isDeprecated}}
+  @Deprecated('This operation has been deprecated')
+  {{/isDeprecated}}
+  Future<ApiResponse<{{{returnType}}}{{^returnType}}void{{/returnType}}>> {{nickname}}({ {{#allParams}}{{#isPathParam}}
+    required {{{dataType}}} {{paramName}},{{/isPathParam}}{{#isQueryParam}}
+    {{#required}}{{^isNullable}}{{^defaultValue}}required {{/defaultValue}}{{/isNullable}}{{/required}}{{{dataType}}}{{#required}}{{#isNullable}}?{{/isNullable}}{{/required}}{{^required}}?{{/required}} {{paramName}}{{^isContainer}}{{#defaultValue}} = {{{.}}}{{/defaultValue}}{{/isContainer}},{{/isQueryParam}}{{#isHeaderParam}}
+    {{#required}}{{^isNullable}}{{^defaultValue}}required {{/defaultValue}}{{/isNullable}}{{/required}}{{{dataType}}}{{#required}}{{#isNullable}}?{{/isNullable}}{{/required}}{{^required}}?{{/required}} {{paramName}}{{^isContainer}}{{#defaultValue}} = {{{.}}}{{/defaultValue}}{{/isContainer}},{{/isHeaderParam}}{{#isBodyParam}}
+    {{#required}}{{^isNullable}}required {{/isNullable}}{{/required}}{{{dataType}}}{{#required}}{{#isNullable}}?{{/isNullable}}{{/required}}{{^required}}?{{/required}} {{paramName}},{{/isBodyParam}}{{#isFormParam}}
+    {{#required}}{{^isNullable}}required {{/isNullable}}{{/required}}{{{dataType}}}{{#required}}{{#isNullable}}?{{/isNullable}}{{/required}}{{^required}}?{{/required}} {{paramName}},{{/isFormParam}}{{/allParams}}
+    CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    ValidateStatus? validateStatus,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    final _path = {{classname}}ApiPath.{{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}Path
+    //r'{{{path}}}'{{#pathParams}}.replaceAll('{' r'{{{baseName}}}' '}', {{{paramName}}}.toString()){{/pathParams}};
+    
+    final _queryParameters = <String, dynamic>{
+      {{#queryParams}}
+      {{^required}}{{^isNullable}}if ({{{paramName}}} != null) {{/isNullable}}{{/required}}r'{{baseName}}': {{#includeLibraryTemplate}}api/query_param{{/includeLibraryTemplate}},
+      {{/queryParams}}
+    };{{/hasQueryParams}}{{#hasBodyOrFormParams}}
+
+    dynamic _bodyData;
+
+    try {
+{{#includeLibraryTemplate}}api/serialize{{/includeLibraryTemplate}}
+Map<String, dynamic> params = {{classname}}ApiParamsBuilder.build{{#lambda.pascalcase}}{{nickname}}{{/lambda.pascalcase}}Params({{paramName}});
+final _options = RequestOptions(
+      path: _path
+      method: r'{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}',
+      {{#isResponseFile}}
+      responseType: ResponseType.bytes,
+      {{/isResponseFile}}
+      headers: <String, dynamic>{
+        {{#httpUserAgent}}
+        r'User-Agent': r'{{{.}}}',
+        {{/httpUserAgent}}
+        {{#headerParams}}
+        {{^required}}{{^isNullable}}if ({{{paramName}}} != null) {{/isNullable}}{{/required}}r'{{baseName}}': {{paramName}},
+        {{/headerParams}}
+        ...?headers,
+      },
+      extra: <String, dynamic>{
+        'secure': <Map<String, String>>[{{^hasAuthMethods}}],{{/hasAuthMethods}}{{#hasAuthMethods}}
+          {{#authMethods}}{
+            'type': '{{type}}',{{#scheme}}
+            'scheme': '{{.}}',{{/scheme}}
+            'name': '{{name}}',{{#isApiKey}}
+            'keyName': '{{keyParamName}}',
+            'where': '{{#isKeyInQuery}}query{{/isKeyInQuery}}{{#isKeyInHeader}}header{{/isKeyInHeader}}',{{/isApiKey}}
+          },{{/authMethods}}
+        ],{{/hasAuthMethods}}
+        ...?extra,
+      },{{#hasConsumes}}
+      contentType: '{{#prioritizedContentTypes}}{{#-first}}{{{mediaType}}}{{/-first}}{{/prioritizedContentTypes}}',{{/hasConsumes}}
+      validateStatus: validateStatus,
+      data: params['data'],
+      queryParameters:  params['query']
+    );{{#hasQueryParams}}
+
+      final _request = _netcomm.httpClient.buildRequest(_options);
+     _response = await _netcomm.httpClient.handleHttpRequest(_request);
+    {{#includeLibraryTemplate}}api/deserialize{{/includeLibraryTemplate}}
+    return ApiResponse<{{{returnType}}}{{^returnType}}void{{/returnType}}>(
+      data: _data,
+      extra: _response.extras,
+    );
+    } on HttpException catch (e) {
+        throw HttpResponse(
+          statusCode: _response.statusCode,
+          statusMessage: _response.statusMessage,
+          data: _response.data,
+          extras: _response.extras);
+      }catch (error, stackTrace) {
+      throw ApiError(
+        code: -1,
+        message: "",
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }{{/hasBodyOrFormParams}}
+
+  }
+
+  {{/operation}}
+}
+{{/operations}}
