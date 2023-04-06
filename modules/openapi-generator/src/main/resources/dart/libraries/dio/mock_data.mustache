@@ -1,0 +1,22 @@
+{{>header}}
+import 'dart:async';
+
+{{#includeLibraryTemplate}}api/imports{{/includeLibraryTemplate}}
+import 'package:dio/dio.dart';
+
+{{#operations}}
+{{#imports}}import '{{.}}';
+{{/imports}}
+
+class MockResponse {
+
+  {{#operation}}
+  {{{#returnType}}}
+  {{{returnType}}} {{nickname}}() {
+    return null;
+  }
+  {{{/returnType}}}
+  
+  {{/operation}}
+}
+{{/operations}}

@@ -49,7 +49,6 @@ import org.openapitools.codegen.model.ModelMap;
 import org.openapitools.codegen.model.ModelsMap;
 import org.openapitools.codegen.model.OperationMap;
 import org.openapitools.codegen.model.OperationsMap;
-import org.openapitools.codegen.model.ApiUtilsMap;
 import org.openapitools.codegen.serializer.SerializerUtils;
 import org.openapitools.codegen.templating.CommonTemplateContentLocator;
 import org.openapitools.codegen.templating.GeneratorTemplateContentLocator;
@@ -710,14 +709,26 @@ public class DefaultGenerator implements Generator {
 
                 addAuthenticationSwitches(operation);
 
-                for (String templateName : config.apiTemplateFiles().keySet()) {
-                    String filename = config.apiFilename(templateName, tag);
+                // for (String templateName : config.apiTemplateFiles().keySet()) {
+                //     String filename = config.apiFilename(templateName, tag);
+                //     File written = processTemplateToFile(operation, templateName, filename, generateApis,
+                //             CodegenConstants.APIS);
+                //     if (written != null) {
+                //         files.add(written);
+                //         if (config.isEnablePostProcessFile() && !dryRun) {
+                //             config.postProcessFile(written, "api");
+                //         }
+                //     }
+                // }
+
+                for (String templateName : config.api2TemplateFiles().keySet()) {
+                    String filename = config.api2Filename(templateName, tag);
                     File written = processTemplateToFile(operation, templateName, filename, generateApis,
                             CodegenConstants.APIS);
                     if (written != null) {
                         files.add(written);
                         if (config.isEnablePostProcessFile() && !dryRun) {
-                            config.postProcessFile(written, "api");
+                            config.postProcessFile(written, "api2");
                         }
                     }
                 }

@@ -11,6 +11,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.meta.features.*;
+import org.openapitools.codegen.model.FileParts;
 import org.openapitools.codegen.model.ModelMap;
 import org.openapitools.codegen.model.ModelsMap;
 import org.openapitools.codegen.model.OperationMap;
@@ -98,14 +99,32 @@ public abstract class AbstractDartCodegen extends DefaultCodegen {
 
         outputFolder = "generated-code/dart";
         modelTemplateFiles.put("model.mustache", ".dart");
+
         apiTemplateFiles.put("api.mustache", ".dart");
-        //apiUtilsTemplateFiles.put("api_paths.mustache", "api_paths.dart");
-        //apiUtilsTemplateFiles.put("api_params_builder.mustache", "api_params_builder.dart");
-        //apiUtilsTemplateFiles.put("api_response_parser.mustache", "api_response_parser.dart");
+
+        FileParts abstractApiFileParts = new FileParts();
+        abstractApiFileParts.setPrefix("i");
+        abstractApiFileParts.setSuffix("api");
+        abstractApiFileParts.setExtension(".dart");
+
+        FileParts apiFileParts = new FileParts();
+        apiFileParts.setPrefix("");
+        apiFileParts.setSuffix("api");
+        apiFileParts.setExtension(".dart");
+
+        FileParts mockApiFileParts = new FileParts();
+        mockApiFileParts.setPrefix("mock");
+        mockApiFileParts.setSuffix("api");
+        mockApiFileParts.setExtension(".dart");
+
+        api2TemplateFiles.put("api_2_abstract.mustache", abstractApiFileParts);
+        api2TemplateFiles.put("api.mustache", apiFileParts);
+        api2TemplateFiles.put("api_2_mock.mustache", mockApiFileParts);
+
         embeddedTemplateDir = templateDir = "dart2";
         apiPackage = "api";
+        api2Package = "api";
         modelPackage = "model";
-        apiUtilsPackage = "api";
         modelDocTemplateFiles.put("object_doc.mustache", ".md");
         apiDocTemplateFiles.put("api_doc.mustache", ".md");
 
@@ -220,9 +239,12 @@ public abstract class AbstractDartCodegen extends DefaultCodegen {
         // Fix a couple Java notation properties
         modelPackage = modelPackage.replace('.', '/');
         apiPackage = apiPackage.replace('.', '/');
+        api2Package = api2Package.replace('.', '/');
+
         // And overwrite them in the additional properties
         additionalProperties.put(CodegenConstants.MODEL_PACKAGE, modelPackage);
         additionalProperties.put(CodegenConstants.API_PACKAGE, apiPackage);
+        additionalProperties.put(CodegenConstants.API2_PACKAGE, api2Package);
 
         if (StringUtils.isEmpty(System.getenv("DART_POST_PROCESS_FILE"))) {
             LOGGER.info("Environment variable DART_POST_PROCESS_FILE not defined so the Dart code may not be properly formatted. To define it, try `export DART_POST_PROCESS_FILE=\"/usr/local/bin/dartfmt -w\"` (Linux/Mac)");
@@ -330,8 +352,8 @@ public abstract class AbstractDartCodegen extends DefaultCodegen {
     }
 
     @Override
-    public String apiUtilsFileFolder() {
-        return (outputFolder + File.separator + libPath + sourceFolder + File.separator + apiUtilsPackage()).replace('/', File.separatorChar);
+    public String api2FileFolder() {
+        return (outputFolder + File.separator + libPath + sourceFolder + File.separator + api2Package()).replace('/', File.separatorChar);
     }
 
     @Override
@@ -462,6 +484,11 @@ public abstract class AbstractDartCodegen extends DefaultCodegen {
     @Override
     public String toApiFilename(String name) {
         return underscore(toApiName(name));
+    }
+
+    @Override
+    public String toApi2Filename(String prefix, String name, String suffix, String ext) {
+        return underscore(toApi2Name(prefix, name, suffix)) + ext;
     }
 
     @Override

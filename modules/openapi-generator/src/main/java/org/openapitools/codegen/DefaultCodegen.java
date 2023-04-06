@@ -55,6 +55,7 @@ import org.openapitools.codegen.meta.FeatureSet;
 import org.openapitools.codegen.meta.GeneratorMetadata;
 import org.openapitools.codegen.meta.Stability;
 import org.openapitools.codegen.meta.features.*;
+import org.openapitools.codegen.model.FileParts;
 import org.openapitools.codegen.model.ModelMap;
 import org.openapitools.codegen.model.ModelsMap;
 import org.openapitools.codegen.model.OperationsMap;
@@ -188,7 +189,7 @@ public class DefaultCodegen implements CodegenConfig {
     protected String modelPackage = "", apiPackage = "", fileSuffix;
     protected String modelNamePrefix = "", modelNameSuffix = "";
     protected String apiNamePrefix = "", apiNameSuffix = "Api";
-    protected String apiUtilsPackage = "";
+    protected String api2Package = "";
     protected String testPackage = "";
     protected String filesMetadataFilename = "FILES";
     protected String versionMetadataFilename = "VERSION";
@@ -197,7 +198,7 @@ public class DefaultCodegen implements CodegenConfig {
     API templates may be written multiple times; APIs are grouped by tag and the file is written once per tag group.
     */
     protected Map<String, String> apiTemplateFiles = new HashMap<>();
-    protected Map<String, String> apiUtilsTemplateFiles = new HashMap<>();
+    protected Map<String, FileParts> api2TemplateFiles = new HashMap<>();
     protected Map<String, String> modelTemplateFiles = new HashMap<>();
     protected Map<String, String> apiTestTemplateFiles = new HashMap<>();
     protected Map<String, String> modelTestTemplateFiles = new HashMap<>();
@@ -345,6 +346,10 @@ public class DefaultCodegen implements CodegenConfig {
 
         if (additionalProperties.containsKey(CodegenConstants.API_PACKAGE)) {
             this.setApiPackage((String) additionalProperties.get(CodegenConstants.API_PACKAGE));
+        }
+
+        if (additionalProperties.containsKey(CodegenConstants.API2_PACKAGE)) {
+            this.setApi2Package((String) additionalProperties.get(CodegenConstants.API2_PACKAGE));
         }
 
         if (additionalProperties.containsKey(CodegenConstants.HIDE_GENERATION_TIMESTAMP)) {
@@ -1217,8 +1222,8 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String apiUtilsPackage() {
-        return apiUtilsPackage;
+    public String api2Package() {
+        return api2Package;
     }
 
     @Override
@@ -1271,8 +1276,8 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public Map<String, String> apiUtilsTemplateFiles() {
-        return apiUtilsTemplateFiles;
+    public Map<String, FileParts> api2TemplateFiles() {
+        return api2TemplateFiles;
     }
 
     @Override
@@ -1286,8 +1291,8 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String apiUtilsFileFolder() {
-        return outputFolder + File.separator + apiUtilsPackage().replace('.', File.separatorChar);
+    public String api2FileFolder() {
+        return outputFolder + File.separator + api2Package().replace('.', File.separatorChar);
     }
 
     @Override
@@ -1442,6 +1447,10 @@ public class DefaultCodegen implements CodegenConfig {
         this.apiPackage = apiPackage;
     }
 
+    public void setApi2Package(String apiPackage) {
+        this.api2Package = apiPackage;
+    }
+
     public Boolean getSortParamsByRequiredFlag() {
         return sortParamsByRequiredFlag;
     }
@@ -1533,6 +1542,11 @@ public class DefaultCodegen implements CodegenConfig {
     @Override
     public String toApiFilename(String name) {
         return toApiName(name);
+    }
+
+    @Override
+    public String toApi2Filename(String prefix, String name, String suffix, String ext) {
+        return toApi2Name(prefix, name, suffix) + ext;
     }
 
     /**
@@ -1733,6 +1747,11 @@ public class DefaultCodegen implements CodegenConfig {
     @Override
     public String toApiImport(String name) {
         return apiPackage() + "." + name;
+    }
+
+    @Override
+    public String toApi2Import(String name) {
+        return api2Package() + "." + name;
     }
 
     /**
@@ -2612,6 +2631,14 @@ public class DefaultCodegen implements CodegenConfig {
             return "DefaultApi";
         }
         return camelize(apiNamePrefix + "_" + name + "_" + apiNameSuffix);
+    }
+
+    @Override
+    public String toApi2Name(String prefix, String name, String suffix) {
+        if (name.length() == 0) {
+            return "DefaultApi";
+        }
+        return camelize(prefix + "_" + name + "_" + suffix);
     }
 
     /**
@@ -5919,14 +5946,11 @@ public class DefaultCodegen implements CodegenConfig {
         return apiFileFolder() + File.separator + toApiFilename(tag) + suffix;
     }
 
-   @Override 
-   public String apiUtilsFilename(String templateName) {
-        return apiUtilsFileFolder() + File.separator + apiUtilFilename(templateName); 
-    }
-
     @Override
-    public String apiUtilFilename(String templateName) {
-        return apiUtilsTemplateFiles().get(templateName);
+    public String api2Filename(String templateName, String tag) {
+        FileParts fileParts = api2TemplateFiles().get(templateName);
+        return api2FileFolder() + File.separator + toApi2Filename(
+            fileParts.getPrefix(), tag, fileParts.getSuffix(), fileParts.getExtension());
     }
 
     @Override

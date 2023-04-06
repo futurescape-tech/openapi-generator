@@ -24,7 +24,7 @@ public class CodegenConstants {
     /* System Properties */
     // NOTE: We may want to move these to a separate class to avoid confusion or modification.
     public static final String APIS = "apis";
-    public static final String API_UTILS = "api_utils";
+    public static final String APIS2 = "apis2";
     public static final String MODELS = "models";
     public static final String SUPPORTING_FILES = "supportingFiles";
     public static final String MODEL_TESTS = "modelTests";
@@ -43,6 +43,9 @@ public class CodegenConstants {
 
     public static final String API_PACKAGE = "apiPackage";
     public static final String API_PACKAGE_DESC = "package for generated api classes";
+
+    public static final String API2_PACKAGE = "api2Package";
+    public static final String API2_PACKAGE_DESC = "package for generated new api classes having multiple implmentations";
 
     public static final String API_SUFFIX = "apiSuffix";
     public static final String API_SUFFIX_DESC = "suffix for api classes";

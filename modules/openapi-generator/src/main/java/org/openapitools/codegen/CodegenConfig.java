@@ -27,6 +27,7 @@ import io.swagger.v3.oas.models.servers.ServerVariable;
 import org.openapitools.codegen.api.TemplatingEngineAdapter;
 import org.openapitools.codegen.meta.FeatureSet;
 import org.openapitools.codegen.meta.GeneratorMetadata;
+import org.openapitools.codegen.model.FileParts;
 import org.openapitools.codegen.model.ModelMap;
 import org.openapitools.codegen.model.ModelsMap;
 import org.openapitools.codegen.model.OperationsMap;
@@ -59,15 +60,15 @@ public interface CodegenConfig {
 
     String apiPackage();
 
+    String api2Package();
+
     String apiFileFolder();
 
-    String apiUtilsFileFolder();
+    String api2FileFolder();
 
     String apiTestFileFolder();
 
     String apiDocFileFolder();
-
-    String apiUtilsPackage();
 
     String fileSuffix();
 
@@ -86,6 +87,8 @@ public interface CodegenConfig {
     String modelPackage();
 
     String toApiName(String name);
+
+    String toApi2Name(String prefix, String name, String suffix);
 
     String toApiVarName(String name);
 
@@ -155,7 +158,7 @@ public interface CodegenConfig {
 
     Map<String, String> apiTemplateFiles();
 
-    Map<String, String> apiUtilsTemplateFiles();
+    Map<String, FileParts> api2TemplateFiles();
 
     Map<String, String> modelTemplateFiles();
 
@@ -183,6 +186,8 @@ public interface CodegenConfig {
 
     String toApiFilename(String name);
 
+    String toApi2Filename(String prefix, String name, String suffix, String ext);
+
     String toModelFilename(String name);
 
     String toApiTestFilename(String name);
@@ -198,6 +203,8 @@ public interface CodegenConfig {
     Map<String, String> toModelImportMap(String name);
 
     String toApiImport(String name);
+
+    String toApi2Import(String name);
 
     void addOperationToGroup(String tag, String resourcePath, Operation operation, CodegenOperation co, Map<String, List<CodegenOperation>> operations);
 
@@ -221,9 +228,7 @@ public interface CodegenConfig {
 
     String apiFilename(String templateName, String tag);
 
-    String apiUtilsFilename(String templateName);
-
-    String apiUtilFilename(String templateName);
+    String api2Filename(String templateName, String tag);
 
     String apiTestFilename(String templateName, String tag);
 
