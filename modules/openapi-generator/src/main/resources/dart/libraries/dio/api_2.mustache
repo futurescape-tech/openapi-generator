@@ -3,6 +3,10 @@ import 'dart:async';
 
 {{#includeLibraryTemplate}}api/imports{{/includeLibraryTemplate}}
 import 'package:netcomm/netcomm.dart';
+import 'package:{{moduleName}}/src/api/api_params_builder.dart';
+import 'package:{{moduleName}}/src/api/api_response_parser.dart';
+import 'package:{{moduleName}}/src/api/api_response_parser.dart';
+import 'package:{{moduleName}}/src/api/api_paths.dart';
 
 {{#operations}}
 {{#imports}}import '{{.}}';

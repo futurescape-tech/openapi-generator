@@ -118,7 +118,7 @@ public abstract class AbstractDartCodegen extends DefaultCodegen {
         mockApiFileParts.setExtension(".dart");
 
         api2TemplateFiles.put("api_2_abstract.mustache", abstractApiFileParts);
-        api2TemplateFiles.put("api.mustache", apiFileParts);
+        api2TemplateFiles.put("api_2.mustache", apiFileParts);
         api2TemplateFiles.put("api_2_mock.mustache", mockApiFileParts);
 
         embeddedTemplateDir = templateDir = "dart2";
