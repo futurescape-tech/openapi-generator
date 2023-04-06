@@ -57,7 +57,7 @@ class {{classname}} {
   }) async {
     final _path = {{classname}}ApiPath.{{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}Path
     //r'{{{path}}}'{{#pathParams}}.replaceAll('{' r'{{{baseName}}}' '}', {{{paramName}}}.toString()){{/pathParams}};
-    
+    {{#hasQueryParams}}
     final _queryParameters = <String, dynamic>{
       {{#queryParams}}
       {{^required}}{{^isNullable}}if ({{{paramName}}} != null) {{/isNullable}}{{/required}}r'{{baseName}}': {{#includeLibraryTemplate}}api/query_param{{/includeLibraryTemplate}},
@@ -100,7 +100,7 @@ final _options = RequestOptions(
       validateStatus: validateStatus,
       data: params['data'],
       queryParameters:  params['query']
-    );{{#hasQueryParams}}
+    );
 
       final _request = _netcomm.httpClient.buildRequest(_options);
      _response = await _netcomm.httpClient.handleHttpRequest(_request);
