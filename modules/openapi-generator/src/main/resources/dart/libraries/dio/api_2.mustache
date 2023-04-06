@@ -55,20 +55,9 @@ class {{classname}} {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = {{classname}}ApiPath.{{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}Path
-    //r'{{{path}}}'{{#pathParams}}.replaceAll('{' r'{{{baseName}}}' '}', {{{paramName}}}.toString()){{/pathParams}};
-    {{#hasQueryParams}}
-    final _queryParameters = <String, dynamic>{
-      {{#queryParams}}
-      {{^required}}{{^isNullable}}if ({{{paramName}}} != null) {{/isNullable}}{{/required}}r'{{baseName}}': {{#includeLibraryTemplate}}api/query_param{{/includeLibraryTemplate}},
-      {{/queryParams}}
-    };{{/hasQueryParams}}{{#hasBodyOrFormParams}}
-
-    dynamic _bodyData;
-
+    final _path = {{baseName}}ApiPath.{{operationId}};
     try {
-{{#includeLibraryTemplate}}api/serialize{{/includeLibraryTemplate}}
-Map<String, dynamic> params = {{classname}}ApiParamsBuilder.build{{#lambda.pascalcase}}{{nickname}}{{/lambda.pascalcase}}Params({{paramName}});
+Map<String, dynamic> params = {{baseName}}ApiParamsBuilder.build{{#lambda.pascalcase}}{{nickname}}{{/lambda.pascalcase}}Params({{paramName}});
 final _options = RequestOptions(
       path: _path
       method: r'{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}',
@@ -98,16 +87,17 @@ final _options = RequestOptions(
       },{{#hasConsumes}}
       contentType: '{{#prioritizedContentTypes}}{{#-first}}{{{mediaType}}}{{/-first}}{{/prioritizedContentTypes}}',{{/hasConsumes}}
       validateStatus: validateStatus,
-      data: params['data'],
-      queryParameters:  params['query']
+      {{#hasBodyOrFormParams}}data: params['data'],{{/hasBodyOrFormParams}}
+      {{#hasQueryParams}}queryParameters:  params['query']{{/hasQueryParams}}
     );
 
       final _request = _netcomm.httpClient.buildRequest(_options);
      _response = await _netcomm.httpClient.handleHttpRequest(_request);
     {{#includeLibraryTemplate}}api/deserialize{{/includeLibraryTemplate}}
+     {{{returnType}}} parsedResponse = {{classname}}ResponseParser.parse{{nickname}}Response(_response);
     return ApiResponse<{{{returnType}}}{{^returnType}}void{{/returnType}}>(
-      data: _data,
-      extra: _response.extras,
+      data: parsedResponse.data,
+      extra: parsedResponse.extras,
     );
     } on HttpException catch (e) {
         throw HttpResponse(
@@ -122,7 +112,6 @@ final _options = RequestOptions(
         error: error,
         stackTrace: stackTrace,
       );
-    }{{/hasBodyOrFormParams}}
 
   }
 
