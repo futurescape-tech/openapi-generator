@@ -1,0 +1,37 @@
+
+class Config {
+
+  String configUrl;
+  String configName;
+  String configApiKey;
+  String module;
+
+  Config({
+    required this.configUrl,
+    required this.configName,
+    required this.configApiKey,
+    required this.module
+  });
+
+  factory Config.fromJson(Map<String, dynamic> json) {
+    return Config(
+        configUrl: json['config_url'],
+        configName: json['config_name'],
+        configApiKey: json['config_api_key'],
+        module: json['module']);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'config_url': configUrl,
+      'config_name': configName,
+      'config_api_key': configApiKey,
+      'module': module
+    };
+  }
+
+  @override
+  String toString() {
+    return 'Config{configUrl: $configUrl, configName: $configName, configApiKey: $configApiKey, module: $module}';
+  }
+}

@@ -289,6 +289,14 @@ public class Generate extends OpenApiGeneratorCommand {
         description = "Only write output files that have changed.")
     private Boolean minimalUpdate;
 
+    @Option(name = "--module-name", title = "Module Name",
+            description = "The name of the module to generate the API client")
+    private String moduleName;
+
+    @Option(name = "--module-code", title = "Module Code",
+            description = "The code of the module to generate the API client")
+    private String moduleCode;
+
     @Override
     public void execute() {
         if (StringUtils.isNotBlank(inputSpecRootDirectory)) {
@@ -458,6 +466,14 @@ public class Generate extends OpenApiGeneratorCommand {
 
         if (strictSpecBehavior != null) {
             configurator.setStrictSpecBehavior(strictSpecBehavior);
+        }
+
+        if (isNotEmpty(moduleName)) {
+            configurator.setModuleName(moduleName);
+        }
+
+        if (isNotEmpty(moduleCode)) {
+            configurator.setModuleCode(moduleCode);
         }
 
         if (globalProperties != null && !globalProperties.isEmpty()) {

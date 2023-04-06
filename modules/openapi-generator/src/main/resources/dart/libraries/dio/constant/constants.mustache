@@ -1,0 +1,26 @@
+
+class Constants {}
+
+class ErrorCodes {
+
+  static const int initLib = {{moduleCode}}0;
+  static const int configMissing = {{moduleCode}}1;
+  static const int envMissing = {{moduleCode}}2;
+}
+
+class ErrorMessages {
+  
+  static const String configMissingAll = "Please provide the following keys as Flagsmith's configs : {config_url, config_api_key, config_name, module}";
+  static const String configMissingUrl = "Please provide Flagsmith's API URL under 'config_url' to fetch configs";
+  static const String configMissingApiKey = "Please provide Flagsmith's API Key under 'config_api_key' to fetch configs";
+  static const String configMissingConfigName = "Please provide Flagsmith's Config Name under 'config_name' to fetch configs";
+  static const String configMissingModule = "Please provide the Module/App Name under 'module' to fetch configs";
+
+  static const String envMissingAll = "Please provide the following keys as environments under 'config_auth_%s' in Flagsmith  : {name, url, token, api_key, client_id, client_secret}";
+  static const String envMissingName = "Please provide 'name' under 'config_{{moduleName}}_%s' in Flagsmith";
+  static const String envMissingUrl = "Please provide 'url' under 'config_{{moduleName}}_%s' in Flagsmith";
+  static const String envMissingApiKey = "Please provide 'api_key' under 'config_{{moduleName}}_%s' in Flagsmith";
+  static const String envMissingToken = "Please provide 'token' under 'config_{{moduleName}}_%s' in Flagsmith";
+  static const String envMissingClientId = "Please provide 'client_id' under 'config_{{moduleName}}_%s' in Flagsmith";
+  static const String envMissingClientSecret = "Please provide 'client_secret' under 'config_{{moduleName}}_%s' in Flagsmith";
+}
