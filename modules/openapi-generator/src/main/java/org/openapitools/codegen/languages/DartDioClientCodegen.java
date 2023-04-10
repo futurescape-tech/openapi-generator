@@ -208,6 +208,7 @@ public class DartDioClientCodegen extends AbstractDartCodegen {
         supportingFiles.add(new SupportingFile("api_paths.mustache", apiFolder, "api_paths.dart"));
         supportingFiles.add(new SupportingFile("api_params_builder.mustache", apiFolder, "api_params_builder.dart"));
         supportingFiles.add(new SupportingFile("api_response_parser.mustache", apiFolder, "api_response_parser.dart"));
+        supportingFiles.add(new SupportingFile("mock_response.mustache", apiFolder, "mock_response.dart"));
 
         final String configsFolder = srcFolder + File.separator + "configs";
         supportingFiles.add(new SupportingFile("config/config.mustache", configsFolder, "config.dart"));

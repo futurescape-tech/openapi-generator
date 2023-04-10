@@ -1,7 +1,13 @@
-{{#operations}}
+{{#apiInfo}}
+{{#apis}}
 {{#imports}}import '{{.}}';
 {{/imports}}
+{{/apis}}
+{{/apiInfo}}
 
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
 class {{classname}}ApiParamsBuilder {
 
   {{#operation}}
@@ -39,9 +45,8 @@ class {{classname}}ApiParamsBuilder {
 
     };
   }
-
+  {{/operation}}
 }
-{{/operation}}
 {{/operations}}
-
-
+{{/apis}}
+{{/apiInfo}}

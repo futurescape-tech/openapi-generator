@@ -357,4 +357,8 @@ public interface CodegenConfig {
     String getModuleCode();
 
     void setModuleCode(String moduleCode);
+
+    String getProjectName();
+
+    void setProjectName(String projectName);
 }

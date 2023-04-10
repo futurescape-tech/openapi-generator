@@ -1,0 +1,25 @@
+import 'dart:async';
+{{#includeLibraryTemplate}}api/imports{{/includeLibraryTemplate}}
+{{#apiInfo}}
+{{#apis}}
+{{#imports}}import '{{.}}';
+{{/imports}}
+{{/apis}}
+{{/apiInfo}}
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+
+class {{classname}}MockResponse {
+
+  {{#operation}}
+  {{#returnType}}{{{returnType}}} {{nickname}}() {
+    /* TODO - Return a dummy response from here */
+    return null;
+  }
+  {{/returnType}}
+  {{/operation}}
+}
+{{/operations}}
+{{/apis}}
+{{/apiInfo}}

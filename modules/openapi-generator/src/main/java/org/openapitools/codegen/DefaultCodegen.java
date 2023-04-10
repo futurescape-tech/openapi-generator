@@ -324,6 +324,8 @@ public class DefaultCodegen implements CodegenConfig {
     
     protected String moduleCode;
 
+    protected String projectName;
+
     public boolean getAddSuffixToDuplicateOperationNicknames() {
         return addSuffixToDuplicateOperationNicknames;
     }
@@ -1397,6 +1399,16 @@ public class DefaultCodegen implements CodegenConfig {
     @Override
     public void setModuleCode(String moduleCode) {
         this.moduleCode = moduleCode;
+    }
+
+    @Override
+    public String getProjectName() {
+        return projectName;
+    }
+
+    @Override
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public void setVersionMetadataFilename(String versionMetadataFilename) {

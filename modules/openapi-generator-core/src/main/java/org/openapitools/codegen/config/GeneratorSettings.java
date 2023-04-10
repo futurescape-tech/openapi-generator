@@ -47,6 +47,7 @@ public final class GeneratorSettings implements Serializable {
     private String library;
     private String moduleName;
     private String moduleCode;
+    private String projectName;
 
     private final Map<String, String> instantiationTypes;
     private final Map<String, String> typeMappings;
@@ -381,6 +382,10 @@ public final class GeneratorSettings implements Serializable {
         return moduleCode;
     }
 
+    public String getProjectName() {
+        return projectName;
+    }
+
     private GeneratorSettings(Builder builder) {
         setDefaults();
 
@@ -413,6 +418,7 @@ public final class GeneratorSettings implements Serializable {
         httpUserAgent = builder.httpUserAgent;
         moduleName = builder.moduleName;
         moduleCode = builder.moduleCode;
+        projectName = builder.projectName;
 
         Map<String, Object> additional = new HashMap<>(builder.additionalProperties);
 
@@ -466,6 +472,9 @@ public final class GeneratorSettings implements Serializable {
         }
         if (isNotEmpty(moduleCode)) {
             additional.put("moduleCode", moduleCode);
+        }
+        if (isNotEmpty(projectName)) {
+            additional.put("projectName", projectName);
         }
 
         additionalProperties = Collections.unmodifiableMap(additional);
@@ -585,6 +594,7 @@ public final class GeneratorSettings implements Serializable {
         private String library;
         private String moduleName;
         private String moduleCode;
+        private String projectName;
         private Map<String, String> instantiationTypes;
         private Map<String, String> typeMappings;
         private Map<String, Object> additionalProperties;
@@ -1092,6 +1102,11 @@ public final class GeneratorSettings implements Serializable {
             return this;
         }
 
+        public Builder withProjectName(String projectName) {
+            this.projectName = projectName;
+            return this;
+        }
+
         /**
          * Returns a {@code GeneratorSettings} built from the parameters previously set.
          *
@@ -1133,6 +1148,7 @@ public final class GeneratorSettings implements Serializable {
                 ", httpUserAgent='" + httpUserAgent + '\'' +
                 ", moduleName='" + moduleName + '\'' +
                 ", moduleCode='" + moduleCode + '\'' +
+                ", projectName='" + projectName + '\'' +
                 '}';
     }
 
@@ -1169,7 +1185,8 @@ public final class GeneratorSettings implements Serializable {
                 Objects.equals(getReleaseNote(), that.getReleaseNote()) &&
                 Objects.equals(getHttpUserAgent(), that.getHttpUserAgent()) &&
                 Objects.equals(getModuleName(), that.getModuleName()) &&
-                Objects.equals(getModuleCode(), that.getModuleCode());
+                Objects.equals(getModuleCode(), that.getModuleCode()) &&
+                Objects.equals(getProjectName(), that.getProjectName());
     }
 
     @Override
@@ -1203,7 +1220,8 @@ public final class GeneratorSettings implements Serializable {
                 getReleaseNote(),
                 getHttpUserAgent(),
                 getModuleName(),
-                getModuleCode()
+                getModuleCode(),
+                getProjectName()
         );
     }
 }

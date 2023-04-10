@@ -1,6 +1,12 @@
+{{#apiInfo}}
+{{#apis}}
 {{#imports}}import '{{.}}';
 {{/imports}}
+{{/apis}}
+{{/apiInfo}}
 
+{{#apiInfo}}
+{{#apis}}
 {{#operations}}
 class {{classname}}ResponseParser {
   {{#operation}}
@@ -23,4 +29,5 @@ class {{classname}}ResponseParser {
   {{/operation}}
 }
 {{/operations}}
-
+{{/apis}}
+{{/apiInfo}}

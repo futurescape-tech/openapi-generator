@@ -69,7 +69,8 @@ public class TemplateManager implements TemplatingExecutor, TemplateProcessor {
      */
     @Override
     public String getFullTemplateContents(String name) {
-        return readTemplate(getFullTemplateFile(name));
+        String t = readTemplate(getFullTemplateFile(name));
+        return t;
     }
 
     /**

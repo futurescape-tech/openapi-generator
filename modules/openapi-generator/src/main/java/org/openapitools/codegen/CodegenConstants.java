@@ -35,6 +35,8 @@ public class CodegenConstants {
     public static final String MODULE_NAME_ = "moduleName";
     public static final String MODULE_CODE_ = "moduleCode";
 
+    public static final String PROJECT_NAME_ = "projectName";
+
     public static final String WITH_XML = "withXml";
     public static final String SKIP_FORM_MODEL = "skipFormModel";
     /* /end System Properties */

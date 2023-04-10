@@ -1,0 +1,155 @@
+
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:{{projectName}}/src/configs/configs_client.dart';
+import 'package:{{projectName}}/src/constants/constants.dart';
+import 'package:{{projectName}}/src/environments/environment.dart';
+import 'package:commons/entities/config_missing_exception.dart';
+import 'package:commons/entities/environment_missing_exception.dart';
+import 'package:commons/entities/init_lib_exception.dart';
+import 'package:{{projectName}}/src/configs/config.dart';
+import 'package:{{projectName}}/src/api/i_{{moduleNameSnakeCase}}_api.dart';
+import 'package:{{projectName}}/src/api/mock_{{moduleNameSnakeCase}}_api.dart';
+import 'package:{{projectName}}/src/api/{{moduleNameSnakeCase}}_api.dart';
+import 'package:sprintf/sprintf.dart';
+
+class {{moduleNamePascalCase}}ApiClient {
+
+  late ConfigsClient _configsClient;
+  late I{{moduleNamePascalCase}}Api _{{moduleNameLowerCase}}Api;
+  late Environment _env;
+
+  late Config _config;
+  Serializers? _serializers;
+  List<Interceptor>? _interceptors;
+
+  bool _initialized = false;
+
+  {{moduleNamePascalCase}}ApiClient({
+    required Config config,
+    Serializers? serializers,
+    List<Interceptors>? interceptors
+  }): _config = config,
+      _serializers = serializers,
+      _interceptors = interceptors
+  
+  Future<void> init() {
+    return Future<void>(() async {
+      if (!_initialized) {
+        try {
+          _validateConfigs();
+          await _initConfigsClient();
+
+          String? envStr = await _configsClient.getFlagValue(_config.configName);
+          if (envStr != null) {
+            Map<String, dynamic>? environment = jsonDecode(envStr);
+            if (environment != null) {
+              _env = Environment.fromJson(data);
+              _validateEnvironments();
+            }
+          }
+
+          _initApi();
+
+          _initialized = true;
+        } catch (e) {
+          _initialized = false;
+          throw InitLibException(
+              code: ErrorCodes.initLib, message: e.toString());
+        }
+      }
+    });
+  }
+
+  void _validateConfigs() {
+    if (config.configUrl == null || configUrl.trim().isEmpty) {
+      throw ConfigMissingException(
+          code: ErrorCodes.configMissing,
+          message: ErrorMessages.configMissingUrl);
+    }
+
+    if (config.configApiKey == null || config.configApiKey.trim().isEmpty) {
+      throw ConfigMissingException(
+          code: ErrorCodes.configMissing,
+          message: ErrorMessages.configMissingApiKey);
+    }
+
+    if (config.configName == null || config.configName.trim().isEmpty) {
+      throw ConfigMissingException(
+          code: ErrorCodes.configMissing,
+          message: ErrorMessages.configMissingConfigName);
+    }
+
+    if (config.module == null || config.module.trim().isEmpty) {
+      throw ConfigMissingException(
+          code: ErrorCodes.configMissing,
+          message: ErrorMessages.configMissingModule);
+    }
+  }
+
+  void _validateEnvironments() {
+    String module = _config.module;
+
+    if (_env.isEmpty) {
+      throw EnvironmentMissingException(
+          code: ErrorCodes.envMissing,
+          message: sprintf(ErrorMessages.envMissingAll, module));
+    }
+
+    if (_envurl == null || _envurl.trim().isEmpty) {
+      throw EnvironmentMissingException(
+          code: ErrorCodes.envMissing,
+          message: sprintf(ErrorMessages.envMissingUrl, module));
+    }
+
+    if (_env.name == null || _env.name.trim().isEmpty) {
+      throw EnvironmentMissingException(
+          code: ErrorCodes.envMissing,
+          message: sprintf(ErrorMessages.envMissingName, module));
+    }
+  }
+
+  Future<void> _initConfigsClient() {
+    return Future<void>(() async {
+      _configsClient = ConfigsClient(
+          url: _config.configUrl,
+          configName: _config.configName,
+          apiKey: _config.configApiKey);
+      await _configsClient.init();
+    });
+  }
+
+  void _initApi() {
+    String envName = _env.name!;
+    String module = _config.module!;
+
+    if (envName == 'prod' || envName == 'stage') {
+      BaseApiInfo baseInfo = BaseApiInfo(
+          url: _env.url ?? '',
+          token: _env.token ?? '',
+          apiKey: _env.apiKey,
+          clientId: _env.clientId,
+          clientSecret: _env.clientSecret,
+          env: envName,
+          module: module
+      );
+
+      Netcomm2 netcomm2 = Netcomm2();
+      netcomm2.httpClient.setConfigs(
+        options: BaseOptions(
+          baseUrl: _env.url
+        ),
+        interceptors: _interceptors
+      );
+
+      _{{moduleNameLowerCase}}Api = {{moduleNamePascalCase}}Api(
+          baseInfo: baseInfo,
+          serializers: _serializers,
+          client: netcomm2,
+          module: module,
+      );
+    } else if (env == 'mock') {
+      _{{moduleNameLowerCase}}Api = Mock{{moduleNamePascalCase}}Api();
+    }
+  }
+}

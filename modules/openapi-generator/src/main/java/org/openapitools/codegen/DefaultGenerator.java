@@ -947,6 +947,7 @@ public class DefaultGenerator implements Generator {
 
         bundle.put("moduleName", config.getModuleName());
         bundle.put("moduleCode", config.getModuleCode());
+        bundle.put("projectName", config.getProjectName());
 
         if (GlobalSettings.getProperty("debugSupportingFiles") != null) {
             LOGGER.info("############ Supporting file info ############");

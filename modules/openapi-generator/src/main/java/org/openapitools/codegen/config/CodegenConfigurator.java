@@ -541,8 +541,8 @@ public class CodegenConfigurator {
         return this;
     }
 
-    public CodegenConfigurator setModuleName(String moduleName) {
-        if (StringUtils.isNotEmpty(moduleName)) {
+    public CodegenConfigurator setProjectName(String projectName) {
+        if (StringUtils.isNotEmpty(projectName)) {
             addAdditionalProperty(CodegenConstants.MODULE_NAME_, moduleName);
         }
         generatorSettingsBuilder.withModuleName(moduleName);
@@ -554,6 +554,14 @@ public class CodegenConfigurator {
             addAdditionalProperty(CodegenConstants.MODULE_CODE_, moduleCode);
         }
         generatorSettingsBuilder.withModuleCode(moduleCode);
+        return this;
+    }
+
+    public CodegenConfigurator setProjectName(String projectName) {
+        if (StringUtils.isNotEmpty(projectName)) {
+            addAdditionalProperty(CodegenConstants.PROJECT_NAME_, projectName);
+        }
+        generatorSettingsBuilder.withProject(moduleName);
         return this;
     }
 
