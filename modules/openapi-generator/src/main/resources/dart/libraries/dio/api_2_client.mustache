@@ -8,15 +8,15 @@ import 'package:commons/entities/config_missing_exception.dart';
 import 'package:commons/entities/environment_missing_exception.dart';
 import 'package:commons/entities/init_lib_exception.dart';
 import 'package:{{projectName}}/src/configs/config.dart';
-import 'package:{{projectName}}/src/api/i_{{moduleNameSnakeCase}}_api.dart';
-import 'package:{{projectName}}/src/api/mock_{{moduleNameSnakeCase}}_api.dart';
-import 'package:{{projectName}}/src/api/{{moduleNameSnakeCase}}_api.dart';
+import 'package:{{projectName}}/src/api/i_{{#lambda.snakecase}}{{moduleName}}{{/lambda.snakecase}}_api.dart';
+import 'package:{{projectName}}/src/api/mock_{{#lambda.snakecase}}{{moduleName}}{{/lambda.snakecase}}_api.dart';
+import 'package:{{projectName}}/src/api/{{#lambda.snakecase}}{{moduleName}}{{/lambda.snakecase}}_api.dart';
 import 'package:sprintf/sprintf.dart';
 
-class {{moduleNamePascalCase}}ApiClient {
+class {{#lambda.titlecase}}{{moduleName}}{{/lambda.titlecase}}ApiClient {
 
   late ConfigsClient _configsClient;
-  late I{{moduleNamePascalCase}}Api _{{moduleNameLowerCase}}Api;
+  late I{{#lambda.titlecase}}{{moduleName}}{{/lambda.titlecase}}Api _{{#lambda.camelcase}}{{moduleName}}{{/lambda.camelcase}}Api;
   late Environment _env;
 
   late Config _config;
@@ -25,7 +25,7 @@ class {{moduleNamePascalCase}}ApiClient {
 
   bool _initialized = false;
 
-  {{moduleNamePascalCase}}ApiClient({
+  {{#lambda.titlecase}}{{moduleName}}{{/lambda.titlecase}}ApiClient({
     required Config config,
     Serializers? serializers,
     List<Interceptors>? interceptors
@@ -142,14 +142,14 @@ class {{moduleNamePascalCase}}ApiClient {
         interceptors: _interceptors
       );
 
-      _{{moduleNameLowerCase}}Api = {{moduleNamePascalCase}}Api(
+      _{{#lambda.camelcase}}{{moduleName}}{{/lambda.camelcase}}Api = {{#lambda.titlecase}}{{moduleName}}{{/lambda.titlecase}}Api(
           baseInfo: baseInfo,
           serializers: _serializers,
           client: netcomm2,
           module: module,
       );
     } else if (env == 'mock') {
-      _{{moduleNameLowerCase}}Api = Mock{{moduleNamePascalCase}}Api();
+      _{{#lambda.camelcase}}{{moduleName}}{{/lambda.camelcase}}Api = Mock{{#lambda.titlecase}}{{moduleName}}{{/lambda.titlecase}}Api();
     }
   }
 }

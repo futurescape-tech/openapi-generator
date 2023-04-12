@@ -195,7 +195,7 @@ public class DartDioClientCodegen extends AbstractDartCodegen {
         supportingFiles.add(new SupportingFile("lib.mustache", libPath, pubName + ".dart"));
 
         final String srcFolder = libPath + sourceFolder;
-        supportingFiles.add(new SupportingFile("api_client.mustache", srcFolder, "api.dart"));
+        //supportingFiles.add(new SupportingFile("api_client.mustache", srcFolder, "api.dart"));
 
         final String authFolder = srcFolder + File.separator + "auth";
         supportingFiles.add(new SupportingFile("auth/api_key_auth.mustache", authFolder, "api_key_auth.dart"));
@@ -219,6 +219,8 @@ public class DartDioClientCodegen extends AbstractDartCodegen {
 
         final String envFolder = srcFolder + File.separator + "environments";
         supportingFiles.add(new SupportingFile("environment/environment.mustache", envFolder, "environment.dart"));
+
+        supportingFiles.add(new SupportingFile("api_2_client.mustache", srcFolder, "api.dart"));
 
         configureSerializationLibrary(srcFolder);
         configureDateLibrary(srcFolder);

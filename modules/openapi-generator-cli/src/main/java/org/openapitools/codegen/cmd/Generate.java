@@ -297,6 +297,10 @@ public class Generate extends OpenApiGeneratorCommand {
             description = "The code of the module to generate the API client")
     private String moduleCode;
 
+    @Option(name = "--project-name", title = "Project Name",
+            description = "The name of the project to generate the API client")
+    private String projectName;
+
     @Override
     public void execute() {
         if (StringUtils.isNotBlank(inputSpecRootDirectory)) {
@@ -474,6 +478,10 @@ public class Generate extends OpenApiGeneratorCommand {
 
         if (isNotEmpty(moduleCode)) {
             configurator.setModuleCode(moduleCode);
+        }
+
+        if (isNotEmpty(projectName)) {
+            configurator.setProjectName(projectName);
         }
 
         if (globalProperties != null && !globalProperties.isEmpty()) {

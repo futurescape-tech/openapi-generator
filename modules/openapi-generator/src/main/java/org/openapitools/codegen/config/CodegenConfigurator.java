@@ -541,8 +541,8 @@ public class CodegenConfigurator {
         return this;
     }
 
-    public CodegenConfigurator setProjectName(String projectName) {
-        if (StringUtils.isNotEmpty(projectName)) {
+    public CodegenConfigurator setModuleName(String moduleName) {
+        if (StringUtils.isNotEmpty(moduleName)) {
             addAdditionalProperty(CodegenConstants.MODULE_NAME_, moduleName);
         }
         generatorSettingsBuilder.withModuleName(moduleName);
@@ -561,7 +561,7 @@ public class CodegenConfigurator {
         if (StringUtils.isNotEmpty(projectName)) {
             addAdditionalProperty(CodegenConstants.PROJECT_NAME_, projectName);
         }
-        generatorSettingsBuilder.withProject(moduleName);
+        generatorSettingsBuilder.withProjectName(projectName);
         return this;
     }
 
@@ -692,6 +692,7 @@ public class CodegenConfigurator {
         config.setStrictSpecBehavior(workflowSettings.isStrictSpecBehavior());
         config.setModuleName(generatorSettings.getModuleName());
         config.setModuleCode(generatorSettings.getModuleCode());
+        config.setProjectName(generatorSettings.getProjectName());
 
         TemplatingEngineAdapter templatingEngine = TemplatingEngineLoader.byIdentifier(workflowSettings.getTemplatingEngineName());
         config.setTemplatingEngine(templatingEngine);
