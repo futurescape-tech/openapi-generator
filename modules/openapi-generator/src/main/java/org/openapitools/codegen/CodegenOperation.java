@@ -142,6 +142,15 @@ public class CodegenOperation {
     }
 
     /**
+     * Check if there's at least one query parameter or at least body parameter or at least one form parameter
+     *
+     * @return true if query or body or form parameter exists, false otherwise
+     */
+    public boolean getHasQueryOrBodyOrFormParams() {
+        return getHasQueryParams() || getHasBodyParam() || getHasFormParams();
+    }
+
+    /**
      * Check if there's at least one form parameter
      *
      * @return true if any cookie parameter exists, false otherwise

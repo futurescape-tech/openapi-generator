@@ -38,7 +38,6 @@ class {{classname}} extends I{{classname}} {
   {{#isDeprecated}}
   @Deprecated('This operation has been deprecated')
   {{/isDeprecated}}
-  @override
   Future<Response<{{{returnType}}}{{^returnType}}void{{/returnType}}>> {{nickname}}({ {{#allParams}}{{#isPathParam}}
     required {{{dataType}}} {{paramName}},{{/isPathParam}}{{#isQueryParam}}
     {{#required}}{{^isNullable}}{{^defaultValue}}required {{/defaultValue}}{{/isNullable}}{{/required}}{{{dataType}}}{{#required}}{{#isNullable}}?{{/isNullable}}{{/required}}{{^required}}?{{/required}} {{paramName}}{{^isContainer}}{{#defaultValue}} = {{{.}}}{{/defaultValue}}{{/isContainer}},{{/isQueryParam}}{{#isHeaderParam}}

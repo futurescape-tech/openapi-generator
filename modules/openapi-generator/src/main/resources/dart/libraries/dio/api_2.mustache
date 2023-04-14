@@ -42,6 +42,7 @@ class {{classname}} {
   {{#isDeprecated}}
   @Deprecated('This operation has been deprecated')
   {{/isDeprecated}}
+  @override
   Future<ApiResponse<{{{returnType}}}{{^returnType}}void{{/returnType}}>> {{nickname}}({ {{#allParams}}{{#isPathParam}}
     required {{{dataType}}} {{paramName}},{{/isPathParam}}{{#isQueryParam}}
     {{#required}}{{^isNullable}}{{^defaultValue}}required {{/defaultValue}}{{/isNullable}}{{/required}}{{{dataType}}}{{#required}}{{#isNullable}}?{{/isNullable}}{{/required}}{{^required}}?{{/required}} {{paramName}}{{^isContainer}}{{#defaultValue}} = {{{.}}}{{/defaultValue}}{{/isContainer}},{{/isQueryParam}}{{#isHeaderParam}}
@@ -55,77 +56,61 @@ class {{classname}} {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = {{classname}}ApiPath.{{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}Path
-    //r'{{{path}}}'{{#pathParams}}.replaceAll('{' r'{{{baseName}}}' '}', {{{paramName}}}.toString()){{/pathParams}};
-    {{#hasQueryParams}}
-    final _queryParameters = <String, dynamic>{
-      {{#queryParams}}
-      {{^required}}{{^isNullable}}if ({{{paramName}}} != null) {{/isNullable}}{{/required}}r'{{baseName}}': {{#includeLibraryTemplate}}api/query_param{{/includeLibraryTemplate}},
-      {{/queryParams}}
-    };{{/hasQueryParams}}{{#hasBodyOrFormParams}}
-
-    dynamic _bodyData;
-
+    final _path = {{classname}}Paths.{{operationId}}{{#pathParams}}.replaceAll('{' r'{{{baseName}}}' '}', {{{paramName}}}.toString()){{/pathParams}};
     try {
-{{#includeLibraryTemplate}}api/serialize{{/includeLibraryTemplate}}
-Map<String, dynamic> params = {{classname}}ApiParamsBuilder.build{{#lambda.pascalcase}}{{nickname}}{{/lambda.pascalcase}}Params({{paramName}});
-final _options = RequestOptions(
-      path: _path
-      method: r'{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}',
-      {{#isResponseFile}}
-      responseType: ResponseType.bytes,
-      {{/isResponseFile}}
-      headers: <String, dynamic>{
-        {{#httpUserAgent}}
-        r'User-Agent': r'{{{.}}}',
-        {{/httpUserAgent}}
-        {{#headerParams}}
-        {{^required}}{{^isNullable}}if ({{{paramName}}} != null) {{/isNullable}}{{/required}}r'{{baseName}}': {{paramName}},
-        {{/headerParams}}
-        ...?headers,
-      },
-      extra: <String, dynamic>{
-        'secure': <Map<String, String>>[{{^hasAuthMethods}}],{{/hasAuthMethods}}{{#hasAuthMethods}}
-          {{#authMethods}}{
-            'type': '{{type}}',{{#scheme}}
-            'scheme': '{{.}}',{{/scheme}}
-            'name': '{{name}}',{{#isApiKey}}
-            'keyName': '{{keyParamName}}',
-            'where': '{{#isKeyInQuery}}query{{/isKeyInQuery}}{{#isKeyInHeader}}header{{/isKeyInHeader}}',{{/isApiKey}}
-          },{{/authMethods}}
-        ],{{/hasAuthMethods}}
-        ...?extra,
-      },{{#hasConsumes}}
-      contentType: '{{#prioritizedContentTypes}}{{#-first}}{{{mediaType}}}{{/-first}}{{/prioritizedContentTypes}}',{{/hasConsumes}}
-      validateStatus: validateStatus,
-      data: params['data'],
-      queryParameters:  params['query']
-    );
+      {{#hasQueryOrBodyOrFormParams}}Map<String, dynamic> params = {{classname}}ParamsBuilder.build{{nickname}}Params({{paramName}});{{/hasQueryOrBodyOrFormParams}}
+      final _options = RequestOptions(
+        path: _path
+        method: r'{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}',
+        {{#isResponseFile}}
+        responseType: ResponseType.bytes,
+        {{/isResponseFile}}
+        headers: <String, dynamic>{
+          {{#httpUserAgent}}
+          r'User-Agent': r'{{{.}}}',
+          {{/httpUserAgent}}
+          {{#headerParams}}
+          {{^required}}{{^isNullable}}if ({{{paramName}}} != null) {{/isNullable}}{{/required}}r'{{baseName}}': {{paramName}},
+          {{/headerParams}}
+          ...?headers,
+        },
+        extra: <String, dynamic>{
+          'secure': <Map<String, String>>[{{^hasAuthMethods}}],{{/hasAuthMethods}}{{#hasAuthMethods}}
+            {{#authMethods}}{
+              'type': '{{type}}',{{#scheme}}
+              'scheme': '{{.}}',{{/scheme}}
+              'name': '{{name}}',{{#isApiKey}}
+              'keyName': '{{keyParamName}}',
+              'where': '{{#isKeyInQuery}}query{{/isKeyInQuery}}{{#isKeyInHeader}}header{{/isKeyInHeader}}',{{/isApiKey}}
+            },{{/authMethods}}
+          ],{{/hasAuthMethods}}
+          ...?extra,
+        },{{#hasConsumes}}
+        contentType: '{{#prioritizedContentTypes}}{{#-first}}{{{mediaType}}}{{/-first}}{{/prioritizedContentTypes}}',{{/hasConsumes}}
+        validateStatus: validateStatus,
+        {{#hasQueryOrBodyOrFormParams}}{{#hasBodyOrFormParams}}data: params['data'],{{/hasBodyOrFormParams}}
+        {{#hasQueryParams}}queryParameters: params['query']{{/hasQueryParams}}{{/hasQueryOrBodyOrFormParams}}
+      );
 
-      final _request = _netcomm.httpClient.buildRequest(_options);
+    final _request = _netcomm.httpClient.buildRequest(_options);
      _response = await _netcomm.httpClient.handleHttpRequest(_request);
-    {{#includeLibraryTemplate}}api/deserialize{{/includeLibraryTemplate}}
+    {{#returnType}}{{{returnType}}} _data = {{classname}}ResponseParser.parse{{nickname}}Response(_response);{{/returnType}}
     return ApiResponse<{{{returnType}}}{{^returnType}}void{{/returnType}}>(
-      data: _data,
+      {{#returnType}}data: _data,{{/returnType}}
       extra: _response.extras,
     );
     } on HttpException catch (e) {
-        throw HttpResponse(
-          statusCode: _response.statusCode,
-          statusMessage: _response.statusMessage,
-          data: _response.data,
-          extras: _response.extras);
-      }catch (error, stackTrace) {
-      throw ApiError(
-        code: -1,
-        message: "",
-        error: error,
-        stackTrace: stackTrace,
-      );
-    }{{/hasBodyOrFormParams}}
-
+        throw ApiError(
+          error: e.body
+        );
+      } catch (error, stackTrace) {
+        throw ApiError(
+          code: -1,
+          message: "",
+          error: error
+        );
+    }
   }
-
   {{/operation}}
 }
 {{/operations}}
